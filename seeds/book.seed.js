@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
-const { connect } = require("../db.js");
+const { mongoConnect } = require("../db.js");
 const { Book } = require("../models/Book.js");
 const { faker } = require("@faker-js/faker");
 const { Author } = require("../models/Author.js");
 
 async function populateBooks() {
   try {
-    await connect();
+    await mongoConnect();
     console.log("Tenemos conexión");
 
     // Borrar datos

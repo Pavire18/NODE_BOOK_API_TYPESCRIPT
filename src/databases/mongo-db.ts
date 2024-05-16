@@ -13,7 +13,7 @@ const config = {
   dbName: DB_NAME,
 };
 
-export const connect = async (): Promise<mongoose.Mongoose | null> => {
+export const mongoConnect = async (): Promise<mongoose.Mongoose | null> => {
   try {
     const database: mongoose.Mongoose = await mongoose.connect(DB_CONNECTION, config);
     const name = database.connection.name;
@@ -25,7 +25,7 @@ export const connect = async (): Promise<mongoose.Mongoose | null> => {
     console.error(error);
     console.log("Error en la conexión, intentando conectar en 5s...");
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    setTimeout(connect, 5000);
+    setTimeout(mongoConnect, 5000);
 
     return null;
   }

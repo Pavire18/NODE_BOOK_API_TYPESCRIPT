@@ -11,11 +11,12 @@ import {
 
 import express from "express";
 import cors from "cors";
-import { connect } from "./db";
+import { mongoConnect } from "./databases/mongo-db";
+import { companyRouter } from "./routes/techCompany.routes";
 
 const main = async (): Promise<void> => {
   // Conexión a la BBDD
-  const database = await connect();
+  const database = await mongoConnect();
 
   // Configuración del server
   const PORT = 3000;
@@ -48,6 +49,7 @@ const main = async (): Promise<void> => {
   app.use("/book", bookRouter);
   app.use("/author", authorRouter)
   app.use("/public", express.static("public"));
+  app.use("/company", companyRouter)
   // app.use("/file-upload", fileUploadRouter);
   app.use("/", router);
 

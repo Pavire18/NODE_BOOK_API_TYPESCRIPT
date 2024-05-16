@@ -1,12 +1,12 @@
 const { mongoose } = require("mongoose");
-const { connect } = require("../db.js");
+const { mongoConnect } = require("../db.js");
 const { Author } = require("../models/Author.js");
 
 const allowedCountries = ["SPAIN", "ITALY", "USA", "GERMANY", "JAPAN", "FRANCE"];
 
 const authorNormalization = async () => {
   try {
-    await connect();
+    await mongoConnect();
     console.log("Conexíón realizada correctamente.");
 
     const authors = await Author.find();
