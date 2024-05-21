@@ -4,6 +4,13 @@ import bcrypt from "bcrypt";
 import fs from "fs";
 import { generateToken } from "../utils/token";
 
+/**
+ * @swagger
+ * tags:
+ *   name: Author
+ *   description: The author managing API
+ */
+
 // Modelos
 import { Author } from "../models/Author";
 import { isAuth } from "../middlewares/auth.middleware";
@@ -35,6 +42,27 @@ export const authorRouter = express.Router();
 //   }
 // });
 
+/**
+ * @swagger
+ * /author:
+ *   get:
+ *     summary: Lists all the athors
+ *     tags: [Author]
+ *     responses:
+ *       200:
+ *         description: The list of the authors
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Author'
+ * 
+ */
+
 authorRouter.get("/", paginator, async (req, res, next) => {
   try {
     const page = req.query.page ? parseInt(req.query.page as string) : 1;
@@ -58,6 +86,27 @@ authorRouter.get("/", paginator, async (req, res, next) => {
   }
 });
 
+/**
+ * @swagger
+ * /author/{id}:
+ *   get:
+ *     summary: Get a author by ID
+ *     tags: [Author]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The author ID
+ *     responses:
+ *       200:
+ *         description: The author info
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Author'
+ */
 authorRouter.get("/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -72,7 +121,32 @@ authorRouter.get("/:id", async (req, res, next) => {
   }
 });
 
-// Endpoint de creación de usuarios
+
+
+/**
+ * @swagger
+ * /authors:
+ *   post:
+ *     summary: Crear un nuevo autor
+ *     tags: [Author]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Author'
+ *     responses:
+ *       201:
+ *         description: Autor creado exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Author'
+ *       400:
+ *         description: Error en la solicitud.
+ *       500:
+ *         description: Error del servidor.
+ */
 authorRouter.post("/", async (req, res, next) => {
   try {
     const author = new Author({
@@ -87,6 +161,27 @@ authorRouter.post("/", async (req, res, next) => {
   }
 });
 
+/**
+ * @swagger
+ * /authors/{id}:
+ *   delete:
+ *     summary: Eliminar un autor por ID
+ *     tags: [Author]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del autor
+ *     responses:
+ *       200:
+ *         description: Autor eliminado exitosamente.
+ *       404:
+ *         description: Autor no encontrado.
+ *       500:
+ *         description: Error del servidor.
+ */
 authorRouter.delete("/:id", isAuth, async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -101,6 +196,33 @@ authorRouter.delete("/:id", isAuth, async (req, res, next) => {
   }
 });
 
+/**
+ * @swagger
+ * /authors/{id}:
+ *   put:
+ *     summary: Actualizar un autor por ID
+ *     tags: [Author]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID del autor
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Author'
+ *     responses:
+ *       200:
+ *         description: Autor actualizado exitosamente.
+ *       404:
+ *         description: Autor no encontrado.
+ *       500:
+ *         description: Error del servidor.
+ */
 authorRouter.put("/:id", isAuth, async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -116,6 +238,33 @@ authorRouter.put("/:id", isAuth, async (req, res, next) => {
   }
 });
 
+/**
+ * @swagger
+ * /authors/image-upload:
+ *   post:
+ *     summary: Subir una imagen para un autor
+ *     tags: [Author]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *               brandId:
+ *                 type: string
+ *                 description: ID del autor
+ *     responses:
+ *       200:
+ *         description: Imagen subida exitosamente.
+ *       404:
+ *         description: Autor no encontrado.
+ *       500:
+ *         description: Error del servidor.
+ */
 authorRouter.post("/image-upload", upload.single("image"), async (req, res, next) => {
   const originalname = req.file?.originalname as string;
   const path = req.file?.path as string;
@@ -138,6 +287,41 @@ authorRouter.post("/image-upload", upload.single("image"), async (req, res, next
   }
 });
 
+
+/**
+ * @swagger
+ * /authors/login:
+ *   post:
+ *     summary: Autenticar un autor
+ *     tags: [Author]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Autenticación exitosa.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: Faltan campos obligatorios.
+ *       401:
+ *         description: Email y/o contraseña incorrectos.
+ *       500:
+ *         description: Error del servidor.
+ */
 authorRouter.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;

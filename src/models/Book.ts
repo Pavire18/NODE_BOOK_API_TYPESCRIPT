@@ -1,6 +1,53 @@
 import mongoose, { ObjectId } from "mongoose";
 const Schema = mongoose.Schema;
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Book:
+ *       type: object
+ *       required:
+ *         - title
+ *         - author
+ *       properties:
+ *         title:
+ *           type: string
+ *           description: Título del libro.
+ *         author:
+ *           type: string
+ *           format: ObjectId
+ *           description: ID del autor del libro.
+ *         pages:
+ *           type: number
+ *           description: Número de páginas del libro.
+ *         publisher:
+ *            type: object
+ *            required:
+ *              - name
+ *              - country
+ *            properties:
+ *              name:
+ *                type: string
+ *                description: Nombre del editor.
+ *              country:
+ *                type: string
+ *                enum: ["SPAIN", "ITALY", "USA", "GERMANY", "JAPAN", "FRANCE"]
+ *                description: País del editor.
+ *                example:
+ *                  name: Editorial ABC
+ *                  country: USA
+ *            example:
+ *              title: El Gran Libro
+ *              author: 5fec63f73121cb33a8c56948
+ *              pages: 300
+ *              publisher:
+ *                name: Editorial XYZ
+ *                country: USA
+ */
+
+
+
 const allowedCountries = ["SPAIN", "ITALY", "USA", "GERMANY", "JAPAN", "FRANCE"];
 
 interface IPublisher {

@@ -1,6 +1,34 @@
 import validator from "validator";
 import mongoose from "mongoose";
 
+
+
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    Author:
+ *      type: object
+ *      required:
+ *        - name
+ *        - password
+ *        - email
+ *        - country
+ *      properties:
+ *        name:
+ *          type: string
+ *          description: Name of the author
+ *        password:
+ *          type: string
+ *          description: password of the author
+ *        country:
+ *          type: string
+ *          description: Country of this Author. (sample SPAIN)
+ *        image:
+ *          type: string
+ *          description: Logo of this brand (sample http://balbblabla.com/image.jpg)
+ */
+
 const Schema = mongoose.Schema;
 
 const allowedCountries: string[] = ["SPAIN", "ITALY", "USA", "GERMANY", "JAPAN", "FRANCE"];
