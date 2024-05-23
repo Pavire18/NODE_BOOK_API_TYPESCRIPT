@@ -12,7 +12,7 @@ import { generateToken } from "../utils/token";
  */
 
 // Modelos
-import { Author } from "../models/Author";
+import { Author } from "../models/mongo/Author";
 import { isAuth } from "../middlewares/auth.middleware";
 import { paginator } from "../middlewares/paginator.middleware";
 
@@ -149,10 +149,7 @@ authorRouter.get("/:id", async (req, res, next) => {
  */
 authorRouter.post("/", async (req, res, next) => {
   try {
-    const author = new Author({
-      name: req.body.name,
-      country: req.body.country,
-    });
+    const author = new Author(req.body);
 
     const createdAuthor = await author.save();
     return res.status(201).json(createdAuthor);
@@ -337,7 +334,7 @@ authorRouter.post("/login", async (req, res, next) => {
 
     const match = await bcrypt.compare(password, author.password);
     if (match) {
-      const userWithoutPass = {
+      const authorWithoutPass = {
         ...author.toObject(),
         password: undefined, // Omitir la propiedad password en lugar de eliminarla
       };

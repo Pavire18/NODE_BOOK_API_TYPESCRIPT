@@ -7,7 +7,7 @@ import express from "express";
  */
 
 // Modelos
-import { Book } from "../models/Book";
+import { Book } from "../models/mongo/Book";
 import { paginator } from "../middlewares/paginator.middleware";
 
 export const bookRouter = express.Router();

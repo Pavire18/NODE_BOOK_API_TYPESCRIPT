@@ -1,4 +1,4 @@
-import { Author } from "../models/Author";
+import { Author } from "../models/mongo/Author";
 import { type NextFunction, type Response } from "express";
 import { verifyToken } from "../utils/token";
 
@@ -22,7 +22,7 @@ export const isAuth = async (req: any, res: Response, next: NextFunction): Promi
 
     return null;
   } catch (error) {
-    res.status(401).json(error);
+    res.status(401).json({ error: "No tienes autorización para realizar esta operación" });
     return null;
   }
 };

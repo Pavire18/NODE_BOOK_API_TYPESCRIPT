@@ -1,6 +1,6 @@
 import validator from "validator";
-import mongoose from "mongoose";
-
+import mongoose, { CallbackError } from "mongoose";
+const bcrypt = require("bcrypt");
 
 
 /**
@@ -33,7 +33,7 @@ const Schema = mongoose.Schema;
 
 const allowedCountries: string[] = ["SPAIN", "ITALY", "USA", "GERMANY", "JAPAN", "FRANCE"];
 
-interface IAuthor {
+export interface IAuthor {
   email: string;
   password: string;
   name: string;
@@ -86,6 +86,21 @@ const authorSchema = new Schema<IAuthor>(
     timestamps: true,
   }
 );
+
+authorSchema.pre("save", async function (next) {
+  try {
+    // Si la contraseña ya estaba encriptada, no la encriptamos de nuevo
+    if (this.isModified("password")) {
+      const saltRounds = 10;
+      const passwordEncrypted = await bcrypt.hash(this.password, saltRounds);
+      this.password = passwordEncrypted;
+    }
+
+    next();
+  } catch (error) {
+    next(error as CallbackError);
+  }
+});
 
 export const Author = mongoose.model<IAuthor>("Author", authorSchema);
 
